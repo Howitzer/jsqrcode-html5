@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>jsqrcode-html5 Demo</title>
+		
+		<!-- jquery -->
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		
+		<!-- bootstrap 3.2.0 -->
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		
+		<!-- jasny bootstrap fileinput -->
+		<link rel="stylesheet" href="css/fileinput.min.css">
+		<script type="text/javascript" src="js/fileinput.min.js"></script>
+		
+		<!-- megapix -->
+		<script type="text/javascript" src="js/megapix-image.min.js"></script>
+		
+		<!-- jsqrcode: must be in this order! -->
+		<script type="text/javascript" src="js/jsqrcode/grid.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/version.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/detector.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/formatinf.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/errorlevel.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/bitmat.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/datablock.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/bmparser.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/datamask.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/rsdecoder.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/gf256poly.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/gf256.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/decoder.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/qrcode.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/findpat.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/alignpat.js"></script>
+		<script type="text/javascript" src="js/jsqrcode/databr.js"></script>
+
+		<script type="text/javascript">
+			$(function() {
+				$('#imageUpload').fileinput();
+				
+				qrcode.callback = logData;
+				
+				$('#uploadImgBtn').click(function() {
+					$(this).text("Uploading. Please wait...").addClass("disabled");
+					
+					var mpImg = new MegaPixImage($('#imageFile')[0].files[0]);
+					var resImg = document.getElementById('qrcode');
+					mpImg.render(resImg, { maxWidth: 250, maxHeight: 250, quality: 0.92 });
+					
+					//Wait half a second for image source to propagate
+					setTimeout(function() {
+						$.ajax({
+							type: 'POST',
+							url: 'ajax/upload-image.php',
+							data: { image: resImg.src},
+							success: function(data) {
+								if (data.success) {
+									logData("<b>AJAX Success:</b> " + data.image, "event");
+									$("#qrcode").attr("src", "images/" + data.image);
+									$("#decodeBtn").prop("disabled", false);
+								}
+								else {
+									logData("<b>Error:</b> Please provide a valid image", "event");
+								}
+							},
+							error: function(request, status, error) {
+								logData("<b>AJAX Error:</b> " + request.responseText, "event");
+							},
+							complete: function(data) {
+								$("#uploadImgBtn").text("Upload QR Code").removeClass("disabled");
+								$('#imageUpload').fileinput('clear');
+							}
+						});
+					}, 500);
+				});
+				
+				$("#decodeBtn").click(function() {
+					qrcode.decode($("#qrcode").attr("src"));
+				});
+				
+				$("#clearOutputBtn").click(function(e) {
+					e.preventDefault();
+					$("#output").html("");
+				});
+			});
+
+			function logData(data, type) {
+				var output = "";
+				
+				if (type == "event") {
+					output = data + "<br />";
+				}
+				else {
+					output = "<b>QR Code Data:</b> " + data + "<br />";
+				}
+				
+				$("#output").append(output);
+			}
+		</script>
+		
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<nav class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">jsqrcode-html5 Demo</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="https://github.com/Howitzer/jsqrcode-html5" target="_blank"><span class="glyphicon glyphicon-share"></span> GitHub</a></li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="alert alert-info hidden-xs hidden-sm"><span class="glyphicon glyphicon-info-sign"></span> <strong>Try it out on your smartphone or tablet!</strong> Take a picture of any QR Code.</div>
+					<form style="background-color: #f5f5f5; border: 1px solid #e3e3e3; padding: 15px;" enctype="multipart/form-data" role="form">
+						<div id="imageUpload" class="fileinput fileinput-new input-group">
+							<div class="form-control">
+								<i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span>
+							</div>
+							<span class="input-group-addon btn btn-default btn-file">
+								<span class="fileinput-new">Select QR Code</span>
+								<span class="fileinput-exists">Change</span>
+								<input type="file" id="imageFile" name="imageFile" accept="image/*">
+							</span>
+							<a href="#" class="input-group-addon btn btn-default fileinput-exists">Remove</a>
+						</div>
+						
+						<button type="button" id="uploadImgBtn" class="btn btn-primary btn-block">Upload QR Code Image</button>
+						
+						<hr /><br />
+						
+						<div class="text-center">
+							<img id="qrcode" src="http://placehold.it/250x250&text=QR%20Code" /><br /><br />
+							<button id="decodeBtn" class="btn btn-danger btn-lg btn-block" type="button" disabled>Decode the QR Code</button>
+						</div>
+						
+						<br /><br />
+						
+						<fieldset>
+							<legend>Decoded Output <a class="btn btn-info btn-sm pull-right" id="clearOutputBtn" href="#">Clear Output</a></legend>
+							<div id="output"></div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
