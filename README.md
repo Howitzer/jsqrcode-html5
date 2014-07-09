@@ -1,6 +1,6 @@
 jsqrcode-html5
 ==============
-Take an image of a QR Code (using HTML5) with your tablet/smartphone, upload it to your server, and then decode it using only JavaScript.
+Take an image of a QR Code with your tablet/smartphone using HTML5, upload it to your server using PHP, and then decode it using only JavaScript.
 
 
 Dependencies
@@ -11,36 +11,37 @@ Dependencies
 
 Demo
 ---
-  * [Bootstrap Demo] - Implemented with [Twitter Bootstrap] and [Jasny Bootstrap]'s fileinput.
+  * **[The jsqrcode-html5 Demo]** - *You must have your own server!*
+  * *Implemented with [Twitter Bootstrap] and [Jasny Bootstrap]'s fileinput.*
 
 Usage
 ---
 **Include the HTML:**
 ``` HTML
 <!-- jquery -->
-<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <!-- megapix -->
 <script type="text/javascript" src="js/megapix-image.min.js"></script>
 
 <!-- jsqrcode: must be in this order! -->
-<script type="text/javascript" src="grid.js"></script>
-<script type="text/javascript" src="version.js"></script>
-<script type="text/javascript" src="detector.js"></script>
-<script type="text/javascript" src="formatinf.js"></script>
-<script type="text/javascript" src="errorlevel.js"></script>
-<script type="text/javascript" src="bitmat.js"></script>
-<script type="text/javascript" src="datablock.js"></script>
-<script type="text/javascript" src="bmparser.js"></script>
-<script type="text/javascript" src="datamask.js"></script>
-<script type="text/javascript" src="rsdecoder.js"></script>
-<script type="text/javascript" src="gf256poly.js"></script>
-<script type="text/javascript" src="gf256.js"></script>
-<script type="text/javascript" src="decoder.js"></script>
-<script type="text/javascript" src="qrcode.js"></script>
-<script type="text/javascript" src="findpat.js"></script>
-<script type="text/javascript" src="alignpat.js"></script>
-<script type="text/javascript" src="databr.js"></script>
+<script type="text/javascript" src="js/grid.js"></script>
+<script type="text/javascript" src="js/version.js"></script>
+<script type="text/javascript" src="js/detector.js"></script>
+<script type="text/javascript" src="js/formatinf.js"></script>
+<script type="text/javascript" src="js/errorlevel.js"></script>
+<script type="text/javascript" src="js/bitmat.js"></script>
+<script type="text/javascript" src="js/datablock.js"></script>
+<script type="text/javascript" src="js/bmparser.js"></script>
+<script type="text/javascript" src="js/datamask.js"></script>
+<script type="text/javascript" src="js/rsdecoder.js"></script>
+<script type="text/javascript" src="js/gf256poly.js"></script>
+<script type="text/javascript" src="js/gf256.js"></script>
+<script type="text/javascript" src="js/decoder.js"></script>
+<script type="text/javascript" src="js/qrcode.js"></script>
+<script type="text/javascript" src="js/findpat.js"></script>
+<script type="text/javascript" src="js/alignpat.js"></script>
+<script type="text/javascript" src="js/databr.js"></script>
 
 
 <input type="file" id="imageFile" name="imageFile" accept="image/*"><br />
@@ -119,7 +120,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-[Bootstrap Demo]:http://howitzer.github.io/jsqrcode-html5
+[The jsqrcode-html5 Demo]:http://howitzer.github.io/jsqrcode-html5
 [Twitter Bootstrap]:https://github.com/twbs/bootstrap
 [Jasny Bootstrap]:http://jasny.github.io/bootstrap/javascript/#fileinput
 [jsqrcode]:https://github.com/LazarSoft/jsqrcode
