@@ -11,12 +11,12 @@ Dependencies
 
 Demo
 ---
-  * *Coming soon* - Implemented with [Twitter Bootstrap] and [Jasny Bootstrap]'s fileinput.
+  * [Bootstrap Demo] - Implemented with [Twitter Bootstrap] and [Jasny Bootstrap]'s fileinput.
 
 Usage
 ---
-**Include the JavaScript:**
-``` JavaScript
+**Include the HTML:**
+``` HTML
 <!-- jquery -->
 <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
 
@@ -42,49 +42,7 @@ Usage
 <script type="text/javascript" src="alignpat.js"></script>
 <script type="text/javascript" src="databr.js"></script>
 
-<script type="text/javascript">
-  $(function() {
-  	qrcode.callback = showData;
-  	
-  	$('#uploadImgBtn').click(function() {
-  		var mpImg = new MegaPixImage($('#imageFile')[0].files[0]);
-  		var resImg = document.getElementById('qrcode');
-  		mpImg.render(resImg, { maxWidth: 250, maxHeight: 250, quality: 0.92 });
-  		
-  		//Wait half a second for image source to propagate
-  		setTimeout(function() {
-  			$.ajax({
-  				type: 'POST',
-  				url: 'ajax/upload-image.php',
-  				data: { image: resImg.src},
-  				success: function(data) {
-  					if (data.success) {
-  						console.log("Success! Image uploaded");
-  						$("#decodeBtn").prop("disabled", false); //Allow decoding
-  					}
-  					else {
-  						console.error("Error: Image could not be uploaded");
-  				  }
-  				},
-  				error: function(data) {
-  				  console.error("AJAX Error");
-  				}
-  			});
-  		}, 500);
-  	});
-  	
-    $("#decodeBtn").click(function() {
-      qrcode.decode($("#qrcode").attr("src"));
-    });
-  });
-  
-  function showData(data) {
-  	$("#output").append(data);
-  }
-</script>
-```
-**Include the HTML:**
-``` HTML
+
 <input type="file" id="imageFile" name="imageFile" accept="image/*"><br />
 <button type="button" id="uploadImgBtn">Upload Image</button>
 
@@ -92,6 +50,48 @@ Usage
 <button type="button" id="decodeBtn" disabled>Decode the QR Code</button>
 
 <div id="output"></div>
+```
+
+**Include the JavaScript:**
+``` JavaScript
+$(function() {
+	qrcode.callback = showData;
+	
+	$('#uploadImgBtn').click(function() {
+		var mpImg = new MegaPixImage($('#imageFile')[0].files[0]);
+		var resImg = document.getElementById('qrcode');
+		mpImg.render(resImg, { maxWidth: 250, maxHeight: 250, quality: 0.92 });
+		
+		//Wait half a second for image source to propagate
+		setTimeout(function() {
+			$.ajax({
+				type: 'POST',
+				url: 'ajax/upload-image.php',
+				data: { image: resImg.src},
+				success: function(data) {
+					if (data.success) {
+						console.log("Success! Image uploaded");
+						$("#decodeBtn").prop("disabled", false); //Allow decoding
+					}
+					else {
+						console.error("Error: Image could not be uploaded");
+				  }
+				},
+				error: function(data) {
+				  console.error("AJAX Error");
+				}
+			});
+		}, 500);
+	});
+	
+  $("#decodeBtn").click(function() {
+    qrcode.decode($("#qrcode").attr("src"));
+  });
+});
+
+function showData(data) {
+	$("#output").append(data);
+}
 ```
 
 
@@ -119,6 +119,7 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+[Bootstrap Demo]:http://howitzer.github.io/jsqrcode-html5
 [Twitter Bootstrap]:https://github.com/twbs/bootstrap
 [Jasny Bootstrap]:http://jasny.github.io/bootstrap/javascript/#fileinput
 [jsqrcode]:https://github.com/LazarSoft/jsqrcode
